@@ -15,18 +15,32 @@ export interface CellRange {
   e: { r: number; c: number };
 }
 
-export interface SheetImage {
+export interface ChartSeries {
+  name: string;
+  values: number[];
+  categories?: string[];
+  color?: string;
+}
+
+export interface SheetDrawing {
   id: string;
   sheetIndex: number;
+  type: 'image' | 'chart';
   fromRow: number;
   fromCol: number;
   toRow?: number;
   toCol?: number;
   width?: number;
   height?: number;
-  src: string;
   name?: string;
+  src?: string;
+  chartTitle?: string;
+  chartType?: string;
+  svgContent?: string;
+  series?: ChartSeries[];
 }
+
+export type SheetImage = SheetDrawing;
 
 export interface SheetSummary {
   name: string;
@@ -42,7 +56,8 @@ export interface SheetSummary {
   colWidths: Record<number, number>;
   rowHeights: Record<number, number>;
   merges: CellRange[];
-  images: SheetImage[];
+  drawings: SheetDrawing[];
+  images: SheetDrawing[];
 }
 
 export interface WorkbookSummary {
@@ -72,7 +87,8 @@ export interface ViewportData {
   merges: CellRange[];
   colWidths: Record<number, number>;
   rowHeights: Record<number, number>;
-  images: SheetImage[];
+  drawings: SheetDrawing[];
+  images: SheetDrawing[];
 }
 
 export interface SearchResult {

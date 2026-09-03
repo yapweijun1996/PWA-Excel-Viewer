@@ -19,7 +19,7 @@ export class GridComponent {
   private colHeadersContainer: HTMLElement;
   private rowHeadersContainer: HTMLElement;
   private cellsContainer: HTMLElement;
-  private imagesContainer: HTMLElement;
+  private drawingsContainer: HTMLElement;
 
   private currentViewport: ViewportData | null = null;
   private isMouseDown = false;
@@ -62,15 +62,15 @@ export class GridComponent {
     this.cellsContainer = document.createElement('div');
     this.cellsContainer.style.cssText = 'position: absolute; top: 0; left: 0; z-index: 10; pointer-events: auto;';
 
-    // Image Canvas
-    this.imagesContainer = document.createElement('div');
-    this.imagesContainer.style.cssText = 'position: absolute; top: 0; left: 0; z-index: 15; pointer-events: auto;';
+    // Drawings / Charts / Images Canvas
+    this.drawingsContainer = document.createElement('div');
+    this.drawingsContainer.style.cssText = 'position: absolute; top: 0; left: 0; z-index: 15; pointer-events: auto;';
 
     this.virtualContent.appendChild(this.cornerHeader);
     this.virtualContent.appendChild(this.colHeadersContainer);
     this.virtualContent.appendChild(this.rowHeadersContainer);
     this.virtualContent.appendChild(this.cellsContainer);
-    this.virtualContent.appendChild(this.imagesContainer);
+    this.virtualContent.appendChild(this.drawingsContainer);
     this.scrollContainer.appendChild(this.virtualContent);
     this.el.appendChild(this.scrollContainer);
 
@@ -286,75 +286,87 @@ export class GridComponent {
     this.scrollContainer.scrollTop = 0;
     this.scrollContainer.scrollLeft = 0;
 
-    this.renderImages();
+    this.renderDrawings();
     this.fetchActiveCellData(session.selectedCell.row, session.selectedCell.col);
     this.updateVirtualization();
   }
 
-  private renderImages(): void {
+  private renderDrawings(): void {
     const sheet = session.workbook?.sheets[session.activeSheetIndex];
-    if (!sheet || !sheet.images || sheet.images.length === 0) {
-      this.imagesContainer.innerHTML = '';
+    const drawings = sheet?.drawings || sheet?.images;
+    if (!sheet || !drawings || drawings.length === 0) {
+      this.drawingsContainer.innerHTML = '';
       return;
     }
 
-    this.imagesContainer.innerHTML = '';
+    this.drawingsContainer.innerHTML = '';
     const frag = document.createDocumentFragment();
 
-    for (const img of sheet.images) {
-      const fromC = img.fromCol;
-      const fromR = img.fromRow;
+    for (const drw of drawings) {
+      const fromC = drw.fromCol;
+      const fromR = drw.fromRow;
       const left = (this.colOffsets[fromC] || 0) + this.rowHeaderWidth;
       const top = (this.rowOffsets[fromR] || 0) + HEADER_HEIGHT;
 
-      let width = 200;
-      let height = 150;
+      let width = 360;
+      let height = 240;
 
-      if (img.toCol !== undefined && img.toRow !== undefined) {
-        const rightEdge = this.colOffsets[img.toCol + 1] || (this.colOffsets[img.toCol] || left) + 100;
-        const bottomEdge = this.rowOffsets[img.toRow + 1] || (this.rowOffsets[img.toRow] || top) + 26;
-        width = Math.max(20, rightEdge - (this.colOffsets[fromC] || 0));
-        height = Math.max(20, bottomEdge - (this.rowOffsets[fromR] || 0));
-      } else if (img.width && img.height) {
-        width = img.width;
-        height = img.height;
+      if (drw.toCol !== undefined && drw.toRow !== undefined) {
+        const rightEdge =
+          this.colOffsets[drw.toCol + 1] ||
+          (this.colOffsets[drw.toCol] || left) + 100;
+        const bottomEdge =
+          this.rowOffsets[drw.toRow + 1] ||
+          (this.rowOffsets[drw.toRow] || top) + 26;
+        width = Math.max(80, rightEdge - (this.colOffsets[fromC] || 0));
+        height = Math.max(60, bottomEdge - (this.rowOffsets[fromR] || 0));
+      } else if (drw.width && drw.height) {
+        width = drw.width;
+        height = drw.height;
       }
 
-      const imgWrapper = document.createElement('div');
-      imgWrapper.className = 'grid-embedded-image';
-      imgWrapper.style.cssText = `
+      const wrapper = document.createElement('div');
+      wrapper.className = 'grid-embedded-drawing';
+      wrapper.style.cssText = `
         position: absolute;
         left: ${left}px;
         top: ${top}px;
         width: ${width}px;
         height: ${height}px;
         box-sizing: border-box;
-        padding: 2px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        padding: 4px;
         z-index: 25;
         pointer-events: auto;
       `;
 
-      const imgEl = document.createElement('img');
-      imgEl.src = img.src;
-      imgEl.alt = img.name || 'Spreadsheet Image';
-      imgEl.style.cssText = `
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-        box-shadow: var(--shadow-md);
-        border: 1px solid var(--border-strong);
-        background: #ffffff;
-        border-radius: var(--radius-sm);
-      `;
+      if (drw.type === 'chart' && drw.svgContent) {
+        wrapper.innerHTML = `
+          <div class="embedded-chart-card" style="width: 100%; height: 100%; box-shadow: var(--shadow-md); border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; background: #ffffff; display: flex; flex-direction: column;">
+            <div style="flex: 1; width: 100%; height: 100%; overflow: hidden;">
+              ${drw.svgContent}
+            </div>
+          </div>
+        `;
+      } else if (drw.src) {
+        const imgEl = document.createElement('img');
+        imgEl.src = drw.src;
+        imgEl.alt = drw.name || 'Spreadsheet Image';
+        imgEl.style.cssText = `
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+          box-shadow: var(--shadow-md);
+          border: 1px solid var(--border-strong);
+          background: #ffffff;
+          border-radius: var(--radius-sm);
+        `;
+        wrapper.appendChild(imgEl);
+      }
 
-      imgWrapper.appendChild(imgEl);
-      frag.appendChild(imgWrapper);
+      frag.appendChild(wrapper);
     }
 
-    this.imagesContainer.appendChild(frag);
+    this.drawingsContainer.appendChild(frag);
   }
 
   private async fetchActiveCellData(row: number, col: number): Promise<void> {
@@ -647,7 +659,7 @@ export class GridComponent {
 
   private renderEmpty(): void {
     this.cellsContainer.innerHTML = '';
-    this.imagesContainer.innerHTML = '';
+    this.drawingsContainer.innerHTML = '';
     this.colHeadersContainer.innerHTML = '';
     this.rowHeadersContainer.innerHTML = '';
   }
