@@ -1,0 +1,45 @@
+{
+  "name": "Spreadsheet Inspector",
+  "short_name": "Spreadsheet",
+  "description": "Private spreadsheet viewer and inspector for your browser",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f6f7f8",
+  "theme_color": "#167c4a",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "./",
+      "name": "Spreadsheet file",
+      "accept": {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
+        "application/vnd.ms-excel": [".xls"],
+        "application/vnd.ms-excel.sheet.macroEnabled.12": [".xlsm"],
+        "application/vnd.ms-excel.sheet.binary.macroEnabled.12": [".xlsb"],
+        "text/csv": [".csv"],
+        "text/tab-separated-values": [".tsv"],
+        "application/vnd.oasis.opendocument.spreadsheet": [".ods"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "app": {
+    "title": "Spreadsheet Inspector",
+    "subtitle": "Trình xem và kiểm tra bảng tính riêng tư ngay trên trình duyệt của bạn"
+  },
+  "common": {
+    "cancel": "Hủy",
+    "close": "Đóng",
+    "confirm": "Xác nhận",
+    "save": "Lưu",
+    "back": "Quay lại",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép",
+    "loading": "Đang tải...",
+    "search": "Tìm kiếm",
+    "clear": "Xóa",
+    "ok": "OK",
+    "delete": "Xóa",
+    "remove": "Loại bỏ",
+    "warning": "Cảnh báo",
+    "error": "Lỗi"
+  },
+  "home": {
+    "openSpreadsheet": "Mở Bảng tính",
+    "dropzonePrompt": "Kéo thả tệp bảng tính vào khu vực này",
+    "supportedFormats": "XLSX · XLS · XLSM · XLSB · CSV · TSV · ODS",
+    "privacyNotice": "Xử lý trực tiếp trên thiết bị này. Không có dữ liệu nào được tải lên.",
+    "learnPrivacy": "Tìm hiểu cách bảo mật hoạt động",
+    "recentTitle": "Bảng tính gần đây",
+    "recentEmpty": "Chưa có bảng tính nào gần đây",
+    "recentNotice": "Mục gần đây chỉ lưu siêu dữ liệu. Tệp gốc vẫn ở trên thiết bị của bạn.",
+    "clearRecent": "Xóa lịch sử gần đây",
+    "reopenPrompt": "Vui lòng chọn lại tệp gốc từ thiết bị của bạn để mở lại."
+  },
+  "viewer": {
+    "overview": "Tổng quan",
+    "sheets": "Trang tính",
+    "warnings": "Cảnh báo",
+    "find": "Tìm kiếm",
+    "goto": "Đi đến",
+    "zoom": "Thu phóng",
+    "openAnother": "Mở bảng tính khác",
+    "ready": "Sẵn sàng",
+    "hidden": "Ẩn",
+    "rows": "hàng",
+    "cols": "cột",
+    "cells": "ô",
+    "structure": "Cấu trúc sổ làm việc"
+  },
+  "grid": {
+    "emptySheet": "Trang tính này không có dữ liệu."
+  },
+  "inspector": {
+    "title": "Trình kiểm tra",
+    "address": "Địa chỉ ô",
+    "displayed": "Giá trị hiển thị",
+    "raw": "Giá trị gốc",
+    "formula": "Công thức",
+    "type": "Kiểu dữ liệu",
+    "format": "Định dạng số",
+    "comment": "Ghi chú",
+    "hyperlink": "Liên kết",
+    "merged": "Ô đã hợp nhất",
+    "selectedCells": "Đã chọn {count} ô",
+    "copyValue": "Sao chép giá trị",
+    "copyFormula": "Sao chép công thức"
+  },
+  "search": {
+    "title": "Tìm trong sổ làm việc",
+    "placeholder": "Nhập văn bản, số hoặc công thức...",
+    "scopeWorkbook": "Toàn bộ sổ làm việc",
+    "scopeSheet": "Trang tính hiện tại",
+    "matchCase": "Phân biệt chữ hoa/thường",
+    "matchesCount": "Tìm thấy {count} kết quả",
+    "noMatches": "Không tìm thấy kết quả phù hợp",
+    "searching": "Đang tìm kiếm..."
+  },
+  "goto": {
+    "title": "Đi đến ô",
+    "placeholder": "Ví dụ: A1, F128, Sales!B42",
+    "submit": "Đi đến",
+    "invalid": "Tham chiếu ô hoặc trang tính không hợp lệ"
+  },
+  "warnings": {
+    "title": "Cảnh báo sổ làm việc",
+    "macroTitle": "Phát hiện VBA Macro",
+    "macroDesc": "Sổ làm việc này chứa macro. Trình xem này không bao giờ thực thi bất kỳ macro nào.",
+    "hiddenSheetsTitle": "{count} trang tính bị ẩn",
+    "externalLinksTitle": "{count} liên kết ngoài",
+    "externalLinksDesc": "Các liên kết ngoài yêu cầu xác nhận rõ ràng trước khi mở.",
+    "continue": "Tiếp tục"
+  },
+  "security": {
+    "externalLinkTitle": "Mở liên kết bên ngoài?",
+    "externalLinkWarning": "Bạn sắp chuyển hướng đến trang web bên ngoài:",
+    "externalLinkProceed": "Mở liên kết",
+    "blockedLinkTitle": "Đã chặn liên kết không an toàn",
+    "blockedLinkDesc": "Liên kết này sử dụng giao thức không được hỗ trợ hoặc tiềm ẩn nguy hiểm ({protocol}) và đã bị chặn để bảo vệ bạn."
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "backToViewer": "Quay lại trình xem",
+    "general": {
+      "title": "Chung",
+      "recentFiles": "Siêu dữ liệu tệp gần đây",
+      "recentFilesDesc": "Lưu danh sách không nhạy cảm của các tệp đã mở (tên, kích cỡ, ngày) trên thiết bị này.",
+      "linkConfirmation": "Xác nhận liên kết ngoài",
+      "linkConfirmationDesc": "Luôn hiển thị hộp thoại xác nhận trước khi mở các trang web bên ngoài."
+    },
+    "appearance": {
+      "title": "Giao diện",
+      "theme": "Chủ đề",
+      "system": "Theo hệ thống",
+      "light": "Sáng",
+      "dark": "Tối",
+      "themeDesc": "Theo hệ thống sẽ tự động khớp với tùy chọn hệ điều hành của bạn."
+    },
+    "language": {
+      "title": "Ngôn ngữ",
+      "select": "Ngôn ngữ hiển thị",
+      "desc": "Giá trị ô bảng tính và tên công thức không bao giờ được dịch."
+    },
+    "privacy": {
+      "title": "Quyền riêng tư & Lưu trữ",
+      "statement": "Riêng tư theo thiết kế. Tệp của bạn được xử lý hoàn toàn trong trình duyệt bằng Web Worker cục bộ. Không có nội dung nào được tải lên máy chủ.",
+      "clearData": "Xóa dữ liệu cục bộ",
+      "clearDataDesc": "Xóa các tùy chọn đã lưu và siêu dữ liệu tệp gần đây khỏi trình duyệt này.",
+      "clearConfirm": "Bạn có chắc chắn muốn xóa toàn bộ cài đặt và siêu dữ liệu đã lưu không?",
+      "dataCleared": "Đã xóa dữ liệu cục bộ."
+    },
+    "about": {
+      "title": "Giới thiệu",
+      "version": "Phiên bản",
+      "license": "Giấy phép: Apache-2.0",
+      "description": "Spreadsheet Inspector là công cụ kiểm tra và xem bảng tính ngoại tuyến bảo mật, ưu tiên trình duyệt.",
+      "github": "Kho lưu trữ GitHub"
+    }
+  },
+  "errors": {
+    "unsupportedFile": "Định dạng tệp không được hỗ trợ. Vui lòng mở tệp XLSX, XLS, XLSM, XLSB, CSV, TSV hoặc ODS.",
+    "corruptFile": "Không thể đọc bảng tính. Tệp có thể bị hỏng hoặc được bảo vệ bằng mật khẩu.",
+    "memoryError": "Tệp quá lớn để xử lý với bộ nhớ trình duyệt hiện có.",
+    "readError": "Không thể đọc tệp từ đĩa.",
+    "emptyFile": "Tệp đã chọn trống."
+  },
+  "pwa": {
+    "updateAvailableTitle": "Có bản cập nhật mới",
+    "updateAvailableDesc": "Phiên bản mới của Spreadsheet Inspector đã sẵn sàng. Cập nhật sẽ làm mới ứng dụng.",
+    "updateNow": "Cập nhật ngay",
+    "updateLater": "Để sau",
+    "offlineReady": "Ứng dụng đã sẵn sàng hoạt động ngoại tuyến."
+  }
+}

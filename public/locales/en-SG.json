@@ -1,0 +1,153 @@
+{
+  "app": {
+    "title": "Spreadsheet Inspector",
+    "subtitle": "Private spreadsheet viewer and inspector for your browser"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "confirm": "Confirm",
+    "save": "Save",
+    "back": "Back",
+    "copy": "Copy",
+    "copied": "Copied",
+    "loading": "Loading...",
+    "search": "Search",
+    "clear": "Clear",
+    "ok": "OK",
+    "delete": "Delete",
+    "remove": "Remove",
+    "warning": "Warning",
+    "error": "Error"
+  },
+  "home": {
+    "openSpreadsheet": "Open Spreadsheet",
+    "dropzonePrompt": "Drop a spreadsheet anywhere in this area",
+    "supportedFormats": "XLSX · XLS · XLSM · XLSB · CSV · TSV · ODS",
+    "privacyNotice": "Processed on this device. Nothing is uploaded.",
+    "learnPrivacy": "Learn how privacy works",
+    "recentTitle": "Recent spreadsheets",
+    "recentEmpty": "No recent spreadsheets",
+    "recentNotice": "Recent items store metadata only. Original files remain on your device.",
+    "clearRecent": "Clear recent history",
+    "reopenPrompt": "Please select the original file from your device to reopen."
+  },
+  "viewer": {
+    "overview": "Overview",
+    "sheets": "Sheets",
+    "warnings": "Warnings",
+    "find": "Find",
+    "goto": "Go to",
+    "zoom": "Zoom",
+    "openAnother": "Open another spreadsheet",
+    "ready": "Ready",
+    "hidden": "Hidden",
+    "rows": "rows",
+    "cols": "columns",
+    "cells": "cells",
+    "structure": "Workbook structure"
+  },
+  "grid": {
+    "emptySheet": "This worksheet has no data."
+  },
+  "inspector": {
+    "title": "Inspector",
+    "address": "Address",
+    "displayed": "Displayed value",
+    "raw": "Raw value",
+    "formula": "Formula",
+    "type": "Data type",
+    "format": "Number format",
+    "comment": "Comment",
+    "hyperlink": "Hyperlink",
+    "merged": "Merged cell",
+    "selectedCells": "{count} cells selected",
+    "copyValue": "Copy value",
+    "copyFormula": "Copy formula"
+  },
+  "search": {
+    "title": "Find in workbook",
+    "placeholder": "Type text, number or formula...",
+    "scopeWorkbook": "Entire workbook",
+    "scopeSheet": "Current sheet",
+    "matchCase": "Match case",
+    "matchesCount": "{count} matches",
+    "noMatches": "No matches found",
+    "searching": "Searching..."
+  },
+  "goto": {
+    "title": "Go to cell",
+    "placeholder": "e.g. A1, F128, Sales!B42",
+    "submit": "Go",
+    "invalid": "Invalid cell or sheet reference"
+  },
+  "warnings": {
+    "title": "Workbook warnings",
+    "macroTitle": "VBA Macros detected",
+    "macroDesc": "This workbook contains macros. Macros are never executed by this viewer.",
+    "hiddenSheetsTitle": "{count} hidden worksheets",
+    "externalLinksTitle": "{count} external hyperlinks",
+    "externalLinksDesc": "External hyperlinks require explicit confirmation before opening.",
+    "continue": "Continue"
+  },
+  "security": {
+    "externalLinkTitle": "Open external link?",
+    "externalLinkWarning": "You are about to navigate to an external website:",
+    "externalLinkProceed": "Open Link",
+    "blockedLinkTitle": "Blocked Unsafe Link",
+    "blockedLinkDesc": "This link uses an unsupported or potentially hazardous protocol ({protocol}) and was blocked for your security."
+  },
+  "settings": {
+    "title": "Settings",
+    "backToViewer": "Back to viewer",
+    "general": {
+      "title": "General",
+      "recentFiles": "Recent files metadata",
+      "recentFilesDesc": "Keep non-sensitive list of opened files (name, size, date) on this device.",
+      "linkConfirmation": "Confirm external links",
+      "linkConfirmationDesc": "Always show confirmation dialog before opening external websites."
+    },
+    "appearance": {
+      "title": "Appearance",
+      "theme": "Theme",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark",
+      "themeDesc": "System matches your operating system preference."
+    },
+    "language": {
+      "title": "Language",
+      "select": "Display Language",
+      "desc": "Spreadsheet cell values and formula names are never translated."
+    },
+    "privacy": {
+      "title": "Privacy & Storage",
+      "statement": "Private by design. Your files are processed entirely in your browser using local Web Workers. No spreadsheet content is uploaded to any server.",
+      "clearData": "Clear local data",
+      "clearDataDesc": "Removes saved preferences and recent file metadata from this browser.",
+      "clearConfirm": "Are you sure you want to clear all stored settings and metadata?",
+      "dataCleared": "Local data cleared."
+    },
+    "about": {
+      "title": "About",
+      "version": "Version",
+      "license": "License: Apache-2.0",
+      "description": "Spreadsheet Inspector is a browser-first, privacy-focused tool for viewing and inspecting spreadsheets offline.",
+      "github": "GitHub Repository"
+    }
+  },
+  "errors": {
+    "unsupportedFile": "Unsupported file format. Please open an XLSX, XLS, XLSM, XLSB, CSV, TSV, or ODS file.",
+    "corruptFile": "Unable to read spreadsheet. The file may be corrupt or encrypted.",
+    "memoryError": "The file is too large to parse with available browser memory.",
+    "readError": "Failed to read file from disk.",
+    "emptyFile": "The selected file is empty."
+  },
+  "pwa": {
+    "updateAvailableTitle": "Update available",
+    "updateAvailableDesc": "A new version of Spreadsheet Inspector is ready. Updating will refresh the application.",
+    "updateNow": "Update now",
+    "updateLater": "Later",
+    "offlineReady": "Application is ready to work offline."
+  }
+}

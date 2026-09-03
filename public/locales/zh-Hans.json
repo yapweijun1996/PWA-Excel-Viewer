@@ -1,0 +1,153 @@
+{
+  "app": {
+    "title": "Spreadsheet Inspector",
+    "subtitle": "浏览器本地私密电子表格查看与检查器"
+  },
+  "common": {
+    "cancel": "取消",
+    "close": "关闭",
+    "confirm": "确认",
+    "save": "保存",
+    "back": "返回",
+    "copy": "复制",
+    "copied": "已复制",
+    "loading": "加载中...",
+    "search": "搜索",
+    "clear": "清除",
+    "ok": "确定",
+    "delete": "删除",
+    "remove": "移除",
+    "warning": "警告",
+    "error": "错误"
+  },
+  "home": {
+    "openSpreadsheet": "打开电子表格",
+    "dropzonePrompt": "将电子表格文件拖放到此区域",
+    "supportedFormats": "XLSX · XLS · XLSM · XLSB · CSV · TSV · ODS",
+    "privacyNotice": "完全在本地设备处理。绝不上传任何内容。",
+    "learnPrivacy": "了解隐私保护机制",
+    "recentTitle": "最近打开的表格",
+    "recentEmpty": "暂无最近记录",
+    "recentNotice": "最近列表仅保存文件元数据。原始文件仍保存在您的设备上。",
+    "clearRecent": "清除最近记录",
+    "reopenPrompt": "请重新选择本地原始文件以打开。"
+  },
+  "viewer": {
+    "overview": "概览",
+    "sheets": "工作表",
+    "warnings": "警告",
+    "find": "查找",
+    "goto": "跳转",
+    "zoom": "缩放",
+    "openAnother": "打开另一个表格",
+    "ready": "就绪",
+    "hidden": "隐藏",
+    "rows": "行",
+    "cols": "列",
+    "cells": "单元格",
+    "structure": "工作簿结构"
+  },
+  "grid": {
+    "emptySheet": "此工作表没有数据。"
+  },
+  "inspector": {
+    "title": "检查器",
+    "address": "单元格地址",
+    "displayed": "显示值",
+    "raw": "原始值",
+    "formula": "公式",
+    "type": "数据类型",
+    "format": "数字格式",
+    "comment": "批注",
+    "hyperlink": "超链接",
+    "merged": "合并单元格",
+    "selectedCells": "已选定 {count} 个单元格",
+    "copyValue": "复制数值",
+    "copyFormula": "复制公式"
+  },
+  "search": {
+    "title": "在工作簿中查找",
+    "placeholder": "输入文本、数字或公式...",
+    "scopeWorkbook": "整个工作簿",
+    "scopeSheet": "当前工作表",
+    "matchCase": "区分大小写",
+    "matchesCount": "找到 {count} 处匹配",
+    "noMatches": "未找到匹配项",
+    "searching": "搜索中..."
+  },
+  "goto": {
+    "title": "跳转到单元格",
+    "placeholder": "例如 A1, F128, Sales!B42",
+    "submit": "前往",
+    "invalid": "无效的单元格或工作表引用"
+  },
+  "warnings": {
+    "title": "工作簿警告",
+    "macroTitle": "检测到 VBA 宏",
+    "macroDesc": "此工作簿包含宏。本查看器绝不会执行任何宏代码。",
+    "hiddenSheetsTitle": "{count} 个隐藏工作表",
+    "externalLinksTitle": "{count} 个外部超链接",
+    "externalLinksDesc": "打开外部超链接前需要您的明确确认。",
+    "continue": "继续"
+  },
+  "security": {
+    "externalLinkTitle": "打开外部链接？",
+    "externalLinkWarning": "您即将前往外部网站：",
+    "externalLinkProceed": "打开链接",
+    "blockedLinkTitle": "已阻止不安全链接",
+    "blockedLinkDesc": "该链接使用了不支持或存在潜在风险的协议（{protocol}），出于安全考虑已被拦截。"
+  },
+  "settings": {
+    "title": "设置",
+    "backToViewer": "返回查看器",
+    "general": {
+      "title": "通用",
+      "recentFiles": "最近文件元数据",
+      "recentFilesDesc": "在本地设备上保留已打开文件的非敏感信息列表（文件名、大小、日期）。",
+      "linkConfirmation": "外部链接确认",
+      "linkConfirmationDesc": "打开外部网址前始终显示确认对话框。"
+    },
+    "appearance": {
+      "title": "外观",
+      "theme": "主题",
+      "system": "跟随系统",
+      "light": "浅色",
+      "dark": "深色",
+      "themeDesc": "“跟随系统”将自动匹配您的操作系统外观偏好。"
+    },
+    "language": {
+      "title": "语言",
+      "select": "显示语言",
+      "desc": "表格内容、单元格数据和公式名称绝不翻译。"
+    },
+    "privacy": {
+      "title": "隐私与存储",
+      "statement": "私密优先设计。您的文件完全在浏览器中使用本地 Web Worker 解析。绝无任何表格内容上传到服务器。",
+      "clearData": "清除本地数据",
+      "clearDataDesc": "从本浏览器中清除已保存的设置和最近文件元数据。",
+      "clearConfirm": "您确定要清除所有本地存储的设置和元数据吗？",
+      "dataCleared": "本地数据已清除。"
+    },
+    "about": {
+      "title": "关于",
+      "version": "版本",
+      "license": "开源协议：Apache-2.0",
+      "description": "Spreadsheet Inspector 是一款浏览器优先、注重隐私的离线电子表格查看与检查工具。",
+      "github": "GitHub 仓库"
+    }
+  },
+  "errors": {
+    "unsupportedFile": "不支持的文件格式。请打开 XLSX、XLS、XLSM、XLSB、CSV、TSV 或 ODS 文件。",
+    "corruptFile": "无法读取电子表格。文件可能已损坏或受密码加密保护。",
+    "memoryError": "文件过大，浏览器可用内存不足以完成解析。",
+    "readError": "从磁盘读取文件失败。",
+    "emptyFile": "所选文件为空文件。"
+  },
+  "pwa": {
+    "updateAvailableTitle": "发现新版本",
+    "updateAvailableDesc": "Spreadsheet Inspector 新版本已就绪。更新后将刷新应用。",
+    "updateNow": "立即更新",
+    "updateLater": "稍后",
+    "offlineReady": "应用已可离线使用。"
+  }
+}

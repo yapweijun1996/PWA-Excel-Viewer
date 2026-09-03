@@ -1,0 +1,153 @@
+{
+  "app": {
+    "title": "Spreadsheet Inspector",
+    "subtitle": "Pemeriksa dan pemapar hamparan data peribadi untuk pelayar anda"
+  },
+  "common": {
+    "cancel": "Batal",
+    "close": "Tutup",
+    "confirm": "Sahkan",
+    "save": "Simpan",
+    "back": "Kembali",
+    "copy": "Salin",
+    "copied": "Disalin",
+    "loading": "Memuatkan...",
+    "search": "Cari",
+    "clear": "Kosongkan",
+    "ok": "OK",
+    "delete": "Padam",
+    "remove": "Keluarkan",
+    "warning": "Amaran",
+    "error": "Ralat"
+  },
+  "home": {
+    "openSpreadsheet": "Buka Hamparan",
+    "dropzonePrompt": "Lepaskan fail hamparan di kawasan ini",
+    "supportedFormats": "XLSX · XLS · XLSM · XLSB · CSV · TSV · ODS",
+    "privacyNotice": "Diproses pada peranti ini. Tiada data dimuat naik.",
+    "learnPrivacy": "Ketahui cara privasi berfungsi",
+    "recentTitle": "Hamparan terkini",
+    "recentEmpty": "Tiada hamparan terkini",
+    "recentNotice": "Item terkini hanya menyimpan metadata. Fail asal kekal pada peranti anda.",
+    "clearRecent": "Kosongkan sejarah terkini",
+    "reopenPrompt": "Sila pilih semula fail asal daripada peranti anda untuk membukanya."
+  },
+  "viewer": {
+    "overview": "Gambaran Keseluruhan",
+    "sheets": "Helaian",
+    "warnings": "Amaran",
+    "find": "Cari",
+    "goto": "Pergi ke",
+    "zoom": "Zum",
+    "openAnother": "Buka hamparan lain",
+    "ready": "Sedia",
+    "hidden": "Tersembunyi",
+    "rows": "baris",
+    "cols": "lajur",
+    "cells": "sel",
+    "structure": "Struktur buku kerja"
+  },
+  "grid": {
+    "emptySheet": "Helaian kerja ini tiada data."
+  },
+  "inspector": {
+    "title": "Pemeriksa",
+    "address": "Alamat",
+    "displayed": "Nilai paparan",
+    "raw": "Nilai mentah",
+    "formula": "Formula",
+    "type": "Jenis data",
+    "format": "Format nombor",
+    "comment": "Komen",
+    "hyperlink": "Pautan hiper",
+    "merged": "Sel digabungkan",
+    "selectedCells": "{count} sel dipilih",
+    "copyValue": "Salin nilai",
+    "copyFormula": "Salin formula"
+  },
+  "search": {
+    "title": "Cari dalam buku kerja",
+    "placeholder": "Taip teks, nombor atau formula...",
+    "scopeWorkbook": "Keseluruhan buku kerja",
+    "scopeSheet": "Helaian semasa",
+    "matchCase": "Padankan huruf besar/kecil",
+    "matchesCount": "{count} padanan",
+    "noMatches": "Tiada padanan dijumpai",
+    "searching": "Mencari..."
+  },
+  "goto": {
+    "title": "Pergi ke sel",
+    "placeholder": "cth. A1, F128, Sales!B42",
+    "submit": "Pergi",
+    "invalid": "Rujukan sel atau helaian tidak sah"
+  },
+  "warnings": {
+    "title": "Amaran buku kerja",
+    "macroTitle": "Makro VBA dikesan",
+    "macroDesc": "Buku kerja ini mengandungi makro. Makro tidak akan dijalankan oleh pemapar ini.",
+    "hiddenSheetsTitle": "{count} helaian kerja tersembunyi",
+    "externalLinksTitle": "{count} pautan hiper luaran",
+    "externalLinksDesc": "Pautan hiper luaran memerlukan pengesahan jelas sebelum dibuka.",
+    "continue": "Teruskan"
+  },
+  "security": {
+    "externalLinkTitle": "Buka pautan luaran?",
+    "externalLinkWarning": "Anda akan melayari laman web luaran:",
+    "externalLinkProceed": "Buka Pautan",
+    "blockedLinkTitle": "Pautan Tidak Selamat Disekat",
+    "blockedLinkDesc": "Pautan ini menggunakan protokol yang tidak disokong atau berisiko ({protocol}) dan telah disekat demi keselamatan anda."
+  },
+  "settings": {
+    "title": "Tetapan",
+    "backToViewer": "Kembali ke pemapar",
+    "general": {
+      "title": "Umum",
+      "recentFiles": "Metadata fail terkini",
+      "recentFilesDesc": "Simpan senarai tidak sensitif fail yang dibuka (nama, saiz, tarikh) pada peranti ini.",
+      "linkConfirmation": "Sahkan pautan luaran",
+      "linkConfirmationDesc": "Sentiasa tunjukkan dialog pengesahan sebelum membuka laman web luaran."
+    },
+    "appearance": {
+      "title": "Rupa Bentuk",
+      "theme": "Tema",
+      "system": "Sistem",
+      "light": "Cerah",
+      "dark": "Gelap",
+      "themeDesc": "Sistem memadankan keutamaan tema sistem pengendalian anda."
+    },
+    "language": {
+      "title": "Bahasa",
+      "select": "Bahasa Paparan",
+      "desc": "Kandungan sel hamparan dan nama formula tidak akan diterjemahkan."
+    },
+    "privacy": {
+      "title": "Privasi & Storan",
+      "statement": "Privasi secara reka bentuk. Fail anda diproses sepenuhnya dalam pelayar anda menggunakan Web Worker tempatan. Tiada kandungan hamparan dimuat naik ke pelayan.",
+      "clearData": "Kosongkan data tempatan",
+      "clearDataDesc": "Mengalih keluar pilihan yang disimpan dan metadata fail terkini daripada pelayar ini.",
+      "clearConfirm": "Adakah anda pasti mahu memadamkan semua tetapan dan metadata yang disimpan?",
+      "dataCleared": "Data tempatan telah dikosongkan."
+    },
+    "about": {
+      "title": "Tentang",
+      "version": "Versi",
+      "license": "Lesen: Apache-2.0",
+      "description": "Spreadsheet Inspector ialah alat pemapar hamparan luar talian yang selamat dan peribadi untuk pelayar.",
+      "github": "Repositori GitHub"
+    }
+  },
+  "errors": {
+    "unsupportedFile": "Format fail tidak disokong. Sila buka fail XLSX, XLS, XLSM, XLSB, CSV, TSV atau ODS.",
+    "corruptFile": "Tidak dapat membaca hamparan. Fail mungkin rosak atau disulitkan dengan kata laluan.",
+    "memoryError": "Fail terlalu besar untuk dihuraikan dengan memori pelayar yang ada.",
+    "readError": "Gagal membaca fail daripada cakera.",
+    "emptyFile": "Fail yang dipilih adalah kosong."
+  },
+  "pwa": {
+    "updateAvailableTitle": "Kemas kini tersedia",
+    "updateAvailableDesc": "Versi baharu Spreadsheet Inspector telah sedia. Mengemas kini akan memuat semula aplikasi.",
+    "updateNow": "Kemas kini sekarang",
+    "updateLater": "Nanti",
+    "offlineReady": "Aplikasi sedia untuk digunakan di luar talian."
+  }
+}
