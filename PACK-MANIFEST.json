@@ -1,0 +1,21 @@
+{
+  "project": "PWA-Excel-Viewer",
+  "target_repository": "https://github.com/yapweijun1996/PWA-Excel-Viewer",
+  "artifact": "UI/UX Build Documentation Pack",
+  "version": "1.0",
+  "generated_date": "2026-09-03",
+  "files": [
+    "README.md",
+    "docs/00-PRODUCT-BASELINE.md",
+    "docs/01-INFORMATION-ARCHITECTURE.md",
+    "docs/02-DESKTOP-UI-UX-VISUAL-SPEC.md",
+    "docs/03-MOBILE-UI-UX-VISUAL-SPEC.md",
+    "docs/04-SCREEN-INTERACTIONS-AND-STATES.md",
+    "docs/05-DESIGN-SYSTEM.md",
+    "docs/06-RESPONSIVE-I18N-THEME-PWA.md",
+    "docs/07-ACCESSIBILITY-SECURITY-PRIVACY.md",
+    "docs/08-AI-AGENT-IMPLEMENTATION-BRIEF.md",
+    "docs/09-QA-ACCEPTANCE-CHECKLIST.md",
+    "docs/10-WIREFRAME-INDEX.md"
+  ]
+}
