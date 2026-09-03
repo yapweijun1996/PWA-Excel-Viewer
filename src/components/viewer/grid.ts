@@ -2,7 +2,7 @@ import { session } from '../../core/session';
 import { appEvents } from '../../core/event-bus';
 import { workerClient } from '../../services/worker-client';
 import { indexToColName } from '../../utils/cell-reference';
-import { ViewportData } from '../../worker/protocol';
+import { ViewportData, CellRange } from '../../worker/protocol';
 import { copyText } from '../../services/clipboard';
 
 const DEFAULT_ROW_HEIGHT = 26;
@@ -19,6 +19,7 @@ export class GridComponent {
   private colHeadersContainer: HTMLElement;
   private rowHeadersContainer: HTMLElement;
   private cellsContainer: HTMLElement;
+  private imagesContainer: HTMLElement;
 
   private currentViewport: ViewportData | null = null;
   private isMouseDown = false;
@@ -28,6 +29,7 @@ export class GridComponent {
 
   // Cached positions
   private colOffsets: number[] = [];
+  private rowOffsets: number[] = [];
   private totalWidth = 0;
   private totalHeight = 0;
   private rowHeaderWidth = 48;
@@ -60,10 +62,15 @@ export class GridComponent {
     this.cellsContainer = document.createElement('div');
     this.cellsContainer.style.cssText = 'position: absolute; top: 0; left: 0; z-index: 10; pointer-events: auto;';
 
+    // Image Canvas
+    this.imagesContainer = document.createElement('div');
+    this.imagesContainer.style.cssText = 'position: absolute; top: 0; left: 0; z-index: 15; pointer-events: auto;';
+
     this.virtualContent.appendChild(this.cornerHeader);
     this.virtualContent.appendChild(this.colHeadersContainer);
     this.virtualContent.appendChild(this.rowHeadersContainer);
     this.virtualContent.appendChild(this.cellsContainer);
+    this.virtualContent.appendChild(this.imagesContainer);
     this.scrollContainer.appendChild(this.virtualContent);
     this.el.appendChild(this.scrollContainer);
 
@@ -141,7 +148,6 @@ export class GridComponent {
 
         const now = Date.now();
         if (now - lastTap < 350) {
-          // Double tap opens mobile inspector
           session.setMobileInspector(true);
         }
         lastTap = now;
@@ -212,9 +218,10 @@ export class GridComponent {
   }
 
   public scrollCellIntoView(row: number, col: number): void {
-    const targetTop = row * DEFAULT_ROW_HEIGHT;
-    const targetLeft = this.colOffsets[col] || col * DEFAULT_COL_WIDTH;
-    const colWidth = (this.colOffsets[col + 1] || targetLeft + DEFAULT_COL_WIDTH) - targetLeft;
+    const targetTop = this.rowOffsets[row] ?? row * DEFAULT_ROW_HEIGHT;
+    const targetLeft = this.colOffsets[col] ?? col * DEFAULT_COL_WIDTH;
+    const rowHeight = (this.rowOffsets[row + 1] ?? targetTop + DEFAULT_ROW_HEIGHT) - targetTop;
+    const colWidth = (this.colOffsets[col + 1] ?? targetLeft + DEFAULT_COL_WIDTH) - targetLeft;
 
     const scrollTop = this.scrollContainer.scrollTop;
     const scrollLeft = this.scrollContainer.scrollLeft;
@@ -223,8 +230,8 @@ export class GridComponent {
 
     if (targetTop < scrollTop) {
       this.scrollContainer.scrollTop = targetTop;
-    } else if (targetTop + DEFAULT_ROW_HEIGHT > scrollTop + clientHeight - HEADER_HEIGHT) {
-      this.scrollContainer.scrollTop = targetTop + DEFAULT_ROW_HEIGHT - clientHeight + HEADER_HEIGHT + 20;
+    } else if (targetTop + rowHeight > scrollTop + clientHeight - HEADER_HEIGHT) {
+      this.scrollContainer.scrollTop = targetTop + rowHeight - clientHeight + HEADER_HEIGHT + 20;
     }
 
     if (targetLeft < scrollLeft) {
@@ -251,14 +258,22 @@ export class GridComponent {
     const digits = String(this.activeSheetRowCount).length;
     this.rowHeaderWidth = Math.max(48, digits * 9 + 18);
 
-    // Precalculate column offsets
+    // Dynamic column offsets matching Excel custom widths
     this.colOffsets = [0];
     for (let c = 0; c < this.activeSheetColCount; c++) {
-      this.colOffsets.push(this.colOffsets[c]! + DEFAULT_COL_WIDTH);
+      const w = sheet.colWidths && sheet.colWidths[c] !== undefined ? sheet.colWidths[c]! : DEFAULT_COL_WIDTH;
+      this.colOffsets.push(this.colOffsets[c]! + w);
+    }
+
+    // Dynamic row offsets matching Excel custom heights
+    this.rowOffsets = [0];
+    for (let r = 0; r < this.activeSheetRowCount; r++) {
+      const h = sheet.rowHeights && sheet.rowHeights[r] !== undefined ? sheet.rowHeights[r]! : DEFAULT_ROW_HEIGHT;
+      this.rowOffsets.push(this.rowOffsets[r]! + h);
     }
 
     this.totalWidth = this.colOffsets[this.colOffsets.length - 1]!;
-    this.totalHeight = this.activeSheetRowCount * DEFAULT_ROW_HEIGHT;
+    this.totalHeight = this.rowOffsets[this.rowOffsets.length - 1]!;
 
     this.virtualContent.style.width = `${this.totalWidth + this.rowHeaderWidth}px`;
     this.virtualContent.style.height = `${this.totalHeight + HEADER_HEIGHT}px`;
@@ -271,8 +286,75 @@ export class GridComponent {
     this.scrollContainer.scrollTop = 0;
     this.scrollContainer.scrollLeft = 0;
 
+    this.renderImages();
     this.fetchActiveCellData(session.selectedCell.row, session.selectedCell.col);
     this.updateVirtualization();
+  }
+
+  private renderImages(): void {
+    const sheet = session.workbook?.sheets[session.activeSheetIndex];
+    if (!sheet || !sheet.images || sheet.images.length === 0) {
+      this.imagesContainer.innerHTML = '';
+      return;
+    }
+
+    this.imagesContainer.innerHTML = '';
+    const frag = document.createDocumentFragment();
+
+    for (const img of sheet.images) {
+      const fromC = img.fromCol;
+      const fromR = img.fromRow;
+      const left = (this.colOffsets[fromC] || 0) + this.rowHeaderWidth;
+      const top = (this.rowOffsets[fromR] || 0) + HEADER_HEIGHT;
+
+      let width = 200;
+      let height = 150;
+
+      if (img.toCol !== undefined && img.toRow !== undefined) {
+        const rightEdge = this.colOffsets[img.toCol + 1] || (this.colOffsets[img.toCol] || left) + 100;
+        const bottomEdge = this.rowOffsets[img.toRow + 1] || (this.rowOffsets[img.toRow] || top) + 26;
+        width = Math.max(20, rightEdge - (this.colOffsets[fromC] || 0));
+        height = Math.max(20, bottomEdge - (this.rowOffsets[fromR] || 0));
+      } else if (img.width && img.height) {
+        width = img.width;
+        height = img.height;
+      }
+
+      const imgWrapper = document.createElement('div');
+      imgWrapper.className = 'grid-embedded-image';
+      imgWrapper.style.cssText = `
+        position: absolute;
+        left: ${left}px;
+        top: ${top}px;
+        width: ${width}px;
+        height: ${height}px;
+        box-sizing: border-box;
+        padding: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 25;
+        pointer-events: auto;
+      `;
+
+      const imgEl = document.createElement('img');
+      imgEl.src = img.src;
+      imgEl.alt = img.name || 'Spreadsheet Image';
+      imgEl.style.cssText = `
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-strong);
+        background: #ffffff;
+        border-radius: var(--radius-sm);
+      `;
+
+      imgWrapper.appendChild(imgEl);
+      frag.appendChild(imgWrapper);
+    }
+
+    this.imagesContainer.appendChild(frag);
   }
 
   private async fetchActiveCellData(row: number, col: number): Promise<void> {
@@ -292,14 +374,20 @@ export class GridComponent {
     const clientHeight = this.scrollContainer.clientHeight || 600;
     const clientWidth = this.scrollContainer.clientWidth || 800;
 
-    // Calculate visible rows
-    const startRow = Math.max(0, Math.floor(scrollTop / DEFAULT_ROW_HEIGHT) - OVERSCAN_ROWS);
-    const endRow = Math.min(
-      this.activeSheetRowCount - 1,
-      Math.ceil((scrollTop + clientHeight) / DEFAULT_ROW_HEIGHT) + OVERSCAN_ROWS
-    );
+    // Binary search/linear scan for visible startRow & endRow
+    let startRow = 0;
+    while (startRow < this.rowOffsets.length - 1 && this.rowOffsets[startRow + 1]! < scrollTop) {
+      startRow++;
+    }
+    startRow = Math.max(0, startRow - OVERSCAN_ROWS);
 
-    // Calculate visible columns
+    let endRow = startRow;
+    while (endRow < this.rowOffsets.length - 1 && this.rowOffsets[endRow]! < scrollTop + clientHeight) {
+      endRow++;
+    }
+    endRow = Math.min(this.activeSheetRowCount - 1, endRow + OVERSCAN_ROWS);
+
+    // Visible startCol & endCol
     let startCol = 0;
     while (startCol < this.colOffsets.length - 1 && this.colOffsets[startCol + 1]! < scrollLeft) {
       startCol++;
@@ -350,15 +438,32 @@ export class GridComponent {
     // Render Row Headers
     let rowHeadersHtml = '';
     for (let r = startRow; r <= endRow; r++) {
-      const top = r * DEFAULT_ROW_HEIGHT + HEADER_HEIGHT;
+      const top = (this.rowOffsets[r] || 0) + HEADER_HEIGHT;
+      const height = (this.rowOffsets[r + 1] || top + DEFAULT_ROW_HEIGHT) - (this.rowOffsets[r] || 0);
       const isRowSelected = session.selectedCell.row === r;
       rowHeadersHtml += `
-        <div class="grid-row-header ${isRowSelected ? 'active' : ''}" style="position: absolute; top: ${top}px; width: ${this.rowHeaderWidth}px; height: ${DEFAULT_ROW_HEIGHT}px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--text-muted); border-bottom: 1px solid var(--border); box-sizing: border-box; user-select: none;">
+        <div class="grid-row-header ${isRowSelected ? 'active' : ''}" style="position: absolute; top: ${top}px; width: ${this.rowHeaderWidth}px; height: ${height}px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--text-muted); border-bottom: 1px solid var(--border); box-sizing: border-box; user-select: none;">
           ${r + 1}
         </div>
       `;
     }
     this.rowHeadersContainer.innerHTML = rowHeadersHtml;
+
+    // Merged Cells Mapping
+    const merges = this.currentViewport?.merges || [];
+    const mergedTopLeft = new Map<string, CellRange>();
+    const hiddenMergedCells = new Set<string>();
+
+    for (const m of merges) {
+      mergedTopLeft.set(`${m.s.r},${m.s.c}`, m);
+      for (let mr = m.s.r; mr <= m.e.r; mr++) {
+        for (let mc = m.s.c; mc <= m.e.c; mc++) {
+          if (mr !== m.s.r || mc !== m.s.c) {
+            hiddenMergedCells.add(`${mr},${mc}`);
+          }
+        }
+      }
+    }
 
     // Render Cells
     const cells = this.currentViewport?.cells || {};
@@ -369,20 +474,35 @@ export class GridComponent {
     const selMinC = selectedRange ? Math.min(selectedRange.s.c, selectedRange.e.c) : selectedCell.col;
     const selMaxC = selectedRange ? Math.max(selectedRange.s.c, selectedRange.e.c) : selectedCell.col;
 
-    // Create fragment
     const frag = document.createDocumentFragment();
 
     for (let r = startRow; r <= endRow; r++) {
       for (let c = startCol; c <= endCol; c++) {
+        // Skip hidden cells inside merged range
+        if (hiddenMergedCells.has(`${r},${c}`)) {
+          continue;
+        }
+
         const left = (this.colOffsets[c] || 0) + this.rowHeaderWidth;
-        const top = r * DEFAULT_ROW_HEIGHT + HEADER_HEIGHT;
-        const width = (this.colOffsets[c + 1] || left + DEFAULT_COL_WIDTH) - (this.colOffsets[c] || 0);
+        const top = (this.rowOffsets[r] || 0) + HEADER_HEIGHT;
+
+        let width = (this.colOffsets[c + 1] || left + DEFAULT_COL_WIDTH) - (this.colOffsets[c] || 0);
+        let height = (this.rowOffsets[r + 1] || top + DEFAULT_ROW_HEIGHT) - (this.rowOffsets[r] || 0);
+
+        const mergeInfo = mergedTopLeft.get(`${r},${c}`);
+        const isMerged = Boolean(mergeInfo);
+        if (mergeInfo) {
+          const rightEdge = this.colOffsets[mergeInfo.e.c + 1] || (this.colOffsets[mergeInfo.e.c] || left) + DEFAULT_COL_WIDTH;
+          const bottomEdge = this.rowOffsets[mergeInfo.e.r + 1] || (this.rowOffsets[mergeInfo.e.r] || top) + DEFAULT_ROW_HEIGHT;
+          width = rightEdge - (this.colOffsets[c] || 0);
+          height = bottomEdge - (this.rowOffsets[r] || 0);
+        }
 
         const cell = cells[`${r},${c}`];
         const textVal = cell?.w || (cell?.v != null ? String(cell.v) : '');
 
         const cellEl = document.createElement('div');
-        cellEl.className = 'grid-cell';
+        cellEl.className = `grid-cell ${isMerged ? 'grid-cell-merged' : ''}`;
         cellEl.setAttribute('data-row', String(r));
         cellEl.setAttribute('data-col', String(c));
 
@@ -393,14 +513,14 @@ export class GridComponent {
 
         let bg = 'var(--bg-surface)';
         let border = '1px solid var(--border)';
-        let zIndex = '1';
+        let zIndex = isMerged ? '3' : '1';
 
         const inRange = r >= selMinR && r <= selMaxR && c >= selMinC && c <= selMaxC;
         const isPrimary = r === selectedCell.row && c === selectedCell.col;
 
         if (isPrimary) {
           border = '2px solid var(--selection-border)';
-          zIndex = '5';
+          zIndex = '6';
           bg = 'var(--selection-fill)';
         } else if (inRange) {
           bg = 'var(--selection-fill)';
@@ -408,31 +528,54 @@ export class GridComponent {
           bg = 'var(--warning-soft)';
         }
 
+        // Text alignment by type
+        let textAlign = 'left';
+        let justifyContent = 'flex-start';
+        let fontWeight = isMerged || r === 0 ? '600' : 'normal';
+
+        if (cell?.t === 'n') {
+          textAlign = 'right';
+          justifyContent = 'flex-end';
+        } else if (cell?.t === 'b') {
+          textAlign = 'center';
+          justifyContent = 'center';
+        } else if (cell?.t === 'd') {
+          textAlign = 'right';
+          justifyContent = 'flex-end';
+        } else if (isMerged) {
+          textAlign = 'center';
+          justifyContent = 'center';
+        }
+
         cellEl.style.cssText = `
           position: absolute;
           left: ${left}px;
           top: ${top}px;
           width: ${width}px;
-          height: ${DEFAULT_ROW_HEIGHT}px;
+          height: ${height}px;
           border-right: ${border};
           border-bottom: ${border};
           ${isPrimary ? 'border: 2px solid var(--selection-border);' : ''}
           background-color: ${bg};
           box-sizing: border-box;
-          padding: 2px 6px;
+          padding: 3px 8px;
           font-size: 13px;
+          font-weight: ${fontWeight};
           color: var(--text-primary);
           overflow: hidden;
           text-overflow: ellipsis;
-          white-space: nowrap;
+          white-space: ${textVal.includes('\n') ? 'pre-wrap' : 'nowrap'};
+          display: flex;
+          align-items: center;
+          justify-content: ${justifyContent};
+          text-align: ${textAlign};
           z-index: ${zIndex};
           user-select: none;
           cursor: cell;
+          font-variant-numeric: tabular-nums;
         `;
 
-        // Safe text rendering: textContent ONLY
         cellEl.textContent = textVal;
-
         frag.appendChild(cellEl);
       }
     }
@@ -442,7 +585,6 @@ export class GridComponent {
   }
 
   private renderSelection(): void {
-    // Rapid update of selection styles without full refetch
     if (!this.currentViewport) return;
     const { startRow, endRow, startCol, endCol } = this.currentViewport;
     this.renderViewport(startRow, endRow, startCol, endCol);
@@ -455,7 +597,6 @@ export class GridComponent {
     const minC = selectedRange ? Math.min(selectedRange.s.c, selectedRange.e.c) : selectedCell.col;
     const maxC = selectedRange ? Math.max(selectedRange.s.c, selectedRange.e.c) : selectedCell.col;
 
-    // Fetch bounding range
     const vp = await workerClient.getViewport(session.activeSheetIndex, minR, maxR, minC, maxC);
     const rows: string[] = [];
 
@@ -473,7 +614,6 @@ export class GridComponent {
   }
 
   private handleExternalReference(ref: string): void {
-    // E.g. Sheet1!B5
     const parts = ref.split('!');
     if (parts.length === 2) {
       const sheetName = parts[0]!.replace(/^'|'$/g, '');
@@ -507,6 +647,7 @@ export class GridComponent {
 
   private renderEmpty(): void {
     this.cellsContainer.innerHTML = '';
+    this.imagesContainer.innerHTML = '';
     this.colHeadersContainer.innerHTML = '';
     this.rowHeadersContainer.innerHTML = '';
   }

@@ -10,6 +10,24 @@ export interface CellData {
   l?: { target: string; tooltip?: string };
 }
 
+export interface CellRange {
+  s: { r: number; c: number };
+  e: { r: number; c: number };
+}
+
+export interface SheetImage {
+  id: string;
+  sheetIndex: number;
+  fromRow: number;
+  fromCol: number;
+  toRow?: number;
+  toCol?: number;
+  width?: number;
+  height?: number;
+  src: string;
+  name?: string;
+}
+
 export interface SheetSummary {
   name: string;
   index: number;
@@ -21,6 +39,10 @@ export interface SheetSummary {
   endRow: number;
   endCol: number;
   cellCount: number;
+  colWidths: Record<number, number>;
+  rowHeights: Record<number, number>;
+  merges: CellRange[];
+  images: SheetImage[];
 }
 
 export interface WorkbookSummary {
@@ -39,10 +61,6 @@ export interface WorkbookSummary {
   warnings: string[];
 }
 
-export interface CellRange {
-  s: { r: number; c: number };
-  e: { r: number; c: number };
-}
 
 export interface ViewportData {
   sheetIndex: number;
@@ -54,6 +72,7 @@ export interface ViewportData {
   merges: CellRange[];
   colWidths: Record<number, number>;
   rowHeights: Record<number, number>;
+  images: SheetImage[];
 }
 
 export interface SearchResult {
